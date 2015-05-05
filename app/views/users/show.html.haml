@@ -1,0 +1,10 @@
+%h3= @user.username
+
+%p Profile Info
+
+%p
+  Comments count:
+  %span{ data={ role: :comments_sum } }= @user.comments_sum
+
+= render partial: the_comments_template('tree'), locals: { commentable: @user, comments_tree: @comments }
+

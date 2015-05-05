@@ -1,0 +1,24 @@
+doctype html
+html(data={ the_log: Rails.env.development? })
+  head
+    title Dummy App
+    = stylesheet_link_tag    :application, 'data-turbolinks-track' => true, media: :all
+    = javascript_include_tag :application, 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  body
+    .body
+      = render partial: 'the_notification/flash', locals: { format: :json }
+
+      p
+        = link_to 'Home', root_path
+        |
+        - if current_user
+          | User:
+          = current_user.username
+          '|
+          = link_to "Comments Manage (+#{current_user.draft_comcoms_count})", manage_comments_path
+          '|
+          = link_to 'Logout', logout_path, method: :delete
+        - else
+          Guest
+      = yield

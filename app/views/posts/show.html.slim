@@ -1,0 +1,8 @@
+h3= @post.title
+p=  @post.content
+
+p
+  Comments count:
+  span{ data={ role: :comments_sum } }= @post.comments_sum
+
+= render partial: the_comments_template('tree'), locals: { commentable: @post, comments_tree: @comments }

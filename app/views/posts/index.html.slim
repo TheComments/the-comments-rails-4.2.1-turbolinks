@@ -1,0 +1,56 @@
+h3 Posts:
+ul
+  - @posts.each do |post|
+    li
+      = link_to post_url(post) do
+        = "#{post.title} (#{post.comments_sum})"
+
+h3 Users:
+ul
+  - @users.each do |user|
+    li
+      = link_to user_url(user) do
+        = "#{user.username} (#{user.comments_sum})"
+
+h3 Autologin Users:
+ul
+  - User.all.each do |user|
+    li
+      = link_to autologin_url(user) do
+        - admin = user.comments_admin? ? '[Admin]' : nil
+        = "#{user.username} (#{user.draft_comcoms_count}) #{admin}"
+
+h3 Recent Comments:
+ul
+  - @recent_comments.each do |comment|
+    p
+      i= comment.commentable.class
+      b= link_to comment.commentable_title, comment.commentable_url
+      br
+      i= comment.content
+
+hr
+h3 Unsubscribe links:
+
+hr
+p
+  b
+    = User.last.id
+    '/
+    = Comment.last.id
+
+- if @last_comment = Comment.last
+  p= link_to "Unsub comment",     unsubscribe_comment_path(EncryptorHelper.crypt('user'), EncryptorHelper.crypt(@last_comment.id), EncryptorHelper.crypt(User.last.id))
+  p= link_to "Unsub commentable", unsubscribe_commentable_path(EncryptorHelper.crypt('user'), EncryptorHelper.crypt(@last_comment.id), EncryptorHelper.crypt(User.last.id))
+
+p= link_to "Unsub all",         unsubscribe_all_path(EncryptorHelper.crypt('user'), EncryptorHelper.crypt(User.first.id))
+
+hr
+p
+  b
+    | email test@test.com / #{ Comment.last.id }
+
+- if @last_comment = Comment.last
+  p= link_to "Unsub comment",     unsubscribe_comment_path(EncryptorHelper.crypt('user'),  EncryptorHelper.crypt(@last_comment.id), EncryptorHelper.crypt(User.first.id))
+  p= link_to "Unsub commentable", unsubscribe_commentable_path(EncryptorHelper.crypt('email'), EncryptorHelper.crypt(@last_comment.id), EncryptorHelper.crypt("test@email.com"))
+p= link_to "Unsub all",         unsubscribe_all_path( EncryptorHelper.crypt('user'), EncryptorHelper.crypt(User.first.id))
